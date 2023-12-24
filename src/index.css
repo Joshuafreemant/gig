@@ -15,3 +15,27 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
+
+.bg-image {
+	background-image: url('/public/background.jpg');
+  }
+  .bg-profile {
+	background-image: url('/public/background.jpg');
+	opacity: 0.9;
+	background-color: black;
+  }
+  
+  
+  .opacity-bg {
+	background-color: rgba(0, 0, 0, 0.5);
+  }
+  .bg-doodle {
+	background-image: url('/public/doodle.jpg');
+
+  }
+  .reciever{
+	border-radius: 15px 15px 0px 15px;
+  }
+  .sender{
+	border-radius: 15px 15px 15px 0px;
+  }
