@@ -3,21 +3,30 @@ import { FaUserCircle } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useMemo } from "react";
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import { logoutApi } from "../apiCalls";
 const Navbar = () => {
-  let [isOpen, setIsOpen] = useState(true);
-
+  let [isOpen, setIsOpen] = useState(false);
+  let [isResultOpen, setIsResultOpen] = useState(false);
+  
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(prev=>!prev);
+  }
+  function closeResultModal() {
+    setIsResultOpen(prev=>!prev);
   }
 
   function openModal() {
     setIsOpen(true);
   }
+  function openResultModal() {
+    setIsResultOpen(true);
+  }
+
 
   const classSets = [
     "1987-1992",
@@ -83,6 +92,7 @@ const Navbar = () => {
 
   const seeResult = (value) => {
     setResult((prev) => !prev);
+    openResultModal(true)
   };
 
   useEffect(() => {
@@ -91,7 +101,18 @@ const Navbar = () => {
   
 const closeModals=()=>{
     closeModal()
+    closeResultModal()
 }
+
+const navigate = useNavigate();
+
+
+const handleLogout = (e) => {
+  e.preventDefault();
+  logoutApi("/auth/logout").then((response) => {
+    navigate("/login");
+  });
+};
   return (
     <>
       {!result && (
@@ -192,7 +213,7 @@ const closeModals=()=>{
                       >
                         Search Result (3)
                       </button>
-                      <button className="py-1 px-3 rounded-lg border  border-black">
+                      <button  className="py-1 px-3 rounded-lg border  border-black">
                         Clear Filter
                       </button>
                     </div>
@@ -205,7 +226,7 @@ const closeModals=()=>{
       )}
 
       {result && (
-        <Transition appear show={isOpen} as={Fragment}>
+        <Transition appear show={isResultOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModal}>
             <Transition.Child
               as={Fragment}
@@ -307,7 +328,7 @@ const closeModals=()=>{
             <FaUserCircle className="text-white text-2xl" />
           </Link>
 
-          <IoIosLogOut className="text-white text-2xl font-semibold" />
+          <IoIosLogOut onClick={(e)=>{handleLogout(e)}} className="text-white text-2xl font-semibold" />
         </div>
       </div>
     </>

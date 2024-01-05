@@ -11,6 +11,8 @@ import Chat from "./pages/Chat";
 import Navbar from "./components/Navbar";
 import Conversations from "./pages/Conversations";
 import Messages from "./pages/Messages";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPasword";
 function App() {
   return (
     <Router>
@@ -19,6 +21,8 @@ function App() {
         {/* <Route path="/" element={auth ? <Social /> : <Login />} /> */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/conversations" element={<Conversations />} />
