@@ -8,16 +8,20 @@ import {
   CountryRegionData,
 } from "react-country-region-selector";
 
-import { updateUserApi } from "../apiCalls";
+import { putFetch } from "../apiCalls";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 
 const Modal = ({ setUserInfo, userInfo, infoModal, setInfoModal }) => {
+  const dispatch = useDispatch();
+
   function closeModal() {
     setInfoModal(false);
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateUserApi(`/user/update-single-user/${userInfo?._id}`, {
+    await putFetch(`/user/update-single-user/${userInfo?._id}`, {
       lastname: userInfo.lastname,
       firstname: userInfo.firstname,
       house: userInfo.house,
@@ -27,6 +31,8 @@ const Modal = ({ setUserInfo, userInfo, infoModal, setInfoModal }) => {
     }).then((response) => {
       if (response?.status === 200) {
         // navigate("/profile");
+        dispatch(setUser(response?.data));
+
         closeModal();
       } else {
         // navigate("/login");

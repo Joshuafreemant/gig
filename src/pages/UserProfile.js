@@ -1,39 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCameraAlt } from "react-icons/md";
 import { ImPencil2 } from "react-icons/im";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoChatboxEllipses } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
-import { getFetch, putFetch } from "../apiCalls";
+import { getFetch } from "../apiCalls";
 import Modal from "../components/Modal";
 import AboutModal from "../components/AboutModal";
 import ProfessionModal from "../components/ProfessionModal";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { setUser } from "../slices/userSlice";
-import { upload } from "../upload";
+import { useSelector } from "react-redux";
 
-const Profile = () => {
+const UserProfile = () => {
   let [userInfo, setUserInfo] = useState(null);
-  let [imagePrev, setImagePrev] = useState(userInfo?.profilePic);
-
-  let [imageFile, setImageFile] = useState();
-  const imageRef = useRef(null);
   let [infoModal, setInfoModal] = useState(false);
   let [aboutModal, setAboutModal] = useState(false);
   let [professionModal, setProfessionModal] = useState(false);
-  const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
-  const userId = user?._id;
+  const {user} = useSelector((state) => state.user);
+  const senderId = user?._id;
+  const {id} = useParams();
   useEffect(() => {
-    getFetch(`/user/get-single-user/${userId}`).then((response) => {
-      setUserInfo(response?.data);
-      setImagePrev(response?.data?.profilePic);
+    getFetch(`/user/get-single-user/${id}`).then((response) => {
+      setUserInfo(response.data);
     });
-  }, []);
+  }, [id]);
 
+ 
   const openModal = () => {
     setInfoModal(true);
   };
@@ -54,60 +47,6 @@ const Profile = () => {
     "Human Resources",
     "Agriculture",
   ];
-
-  
-  //   const data = new FormData();
-  //   data.append("file", file);
-  //   data.append("upload_preset", "alumni");
-  //   try {
-  //     const response = await axios.post(
-  //       "https://api.cloudinary.com/v1_1/df6pun3tr/image/upload",
-  //       data
-  //     );
-  //     const { url } = response.data;
-  //     console.log(url);
-  //     if (url) {
-  //       await putFetch(`/user/update-single-user/${userId}`, {
-  //         profilePic: url,
-  //       }).then((response) => {
-  //         if (response?.status === 200) {
-  //           dispatch(setUser(response?.data));
-  //         } else {
-  //         }
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  const onChange = (event) => {
-    const file = event.target.files;
-    console.log(file);
-    if (file != null) {
-      setImageFile(file);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target != null) {
-          setImagePrev(e.target.result);
-        }
-      };
-      reader.readAsDataURL(file[0]);
-      upload(file[0])
-        .then((response) => {
-          if (response) {
-            putFetch(`/user/update-single-user/${userId}`, {
-              profilePic: response,
-            }).then((response) => {
-              if (response?.status === 200) {
-                dispatch(setUser(response?.data));
-              } else {
-              }
-            });
-          }
-        })
-        .catch((error) => {});
-    }
-  };
 
   return (
     <>
@@ -138,29 +77,21 @@ const Profile = () => {
       <div className="bg-[#1560bd] p-6 relative -mt-1">
         <div className="overflow-clip rounded-full absolute -top-[40px] left-4  h-[100px] w-[100px]">
           <img
-            src={imagePrev || "/avatar.jpg"}
+            src={
+              userInfo?.profilePic || "/avatar.jpg"
+            }
             className="w-full h-full object-cover"
             alt="Background"
           />
         </div>
-        <div className="absolute left-[93px] top-7 bg-gray-100 p-1 rounded-full">
-          <MdCameraAlt
-            className="text-md"
-            onClick={() => imageRef.current.click()}
-          />
-        </div>
+        
 
         <div className="absolute right-[10px] top-4  p-1 rounded-full">
-          {userId === userInfo?._id ? (
-            <ImPencil2
-              className="text-xl text-white"
-              onClick={() => openModal()}
-            />
-          ) : (
-            <Link to="/chat">
+         
+            <Link to={`/messages/${senderId}/${id}`}>
               <IoChatboxEllipses className="text-xl text-white" />
             </Link>
-          )}
+          
         </div>
 
         <div className="flex  text-black min-w-[200px] text-lg font-semibold mt-16 mb-2">
@@ -188,10 +119,7 @@ const Profile = () => {
       <div className="bg-[#1560bd] p-6 relative -mt-1">
         <div className="flex justify-between items-center">
           <h4 className="text-lg font-semibold text-white">About</h4>
-          <ImPencil2
-            className="text-md text-white"
-            onClick={() => setAboutModal(true)}
-          />
+          
         </div>
 
         <p className="mt-4 text-white">
@@ -206,10 +134,7 @@ const Profile = () => {
         <div className="flex justify-between items-center">
           <h4 className="text-lg font-semibold text-white">Profession</h4>
 
-          <ImPencil2
-            onClick={() => setProfessionModal(true)}
-            className="text-md text-white"
-          />
+         
         </div>
 
         <div className="flex flex-col gap-3">
@@ -234,16 +159,8 @@ const Profile = () => {
           ))}
         </div>
       </div>
-
-      <input
-        type="file"
-        style={{ display: "none" }}
-        ref={imageRef}
-        accept="image/*"
-        onChange={onChange}
-      />
     </>
   );
 };
 
-export default Profile;
+export default UserProfile;

@@ -2,20 +2,26 @@ import React, { useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useMemo } from "react";
 
-import { updateUserApi } from "../apiCalls";
+import { putFetch } from "../apiCalls";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 
 const AboutModal = ({ setUserInfo, userInfo, aboutModal, setAboutModal }) => {
+  const dispatch = useDispatch();
+ 
   function closeModal() {
     setAboutModal(false);
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateUserApi(`/user/update-single-user/${userInfo?._id}`, {
+    await putFetch(`/user/update-single-user/${userInfo?._id}`, {
       bio: userInfo.bio,
     }).then((response) => {
       if (response?.status === 200) {
         // navigate("/profile");
+        dispatch(setUser(response?.data));
+
         closeModal()
       } else {
         // navigate("/login");

@@ -3,21 +3,30 @@ import { FaUserCircle } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useMemo } from "react";
 import Select from "react-select";
 import countryList from "react-select-country-list";
-import { logoutApi } from "../apiCalls";
+import { postFetch } from "../apiCalls";
+import FilterModal from "./FilterModal";
+import FilterResult from "./FilterResult";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../slices/userSlice";
+
 const Navbar = () => {
+  let location = useLocation();
+  const { user } = useSelector((state) => state.user);
+  const userId = user?._id;
+  const dispatch = useDispatch();
   let [isOpen, setIsOpen] = useState(false);
   let [isResultOpen, setIsResultOpen] = useState(false);
-  
+
   function closeModal() {
-    setIsOpen(prev=>!prev);
+    setIsOpen((prev) => !prev);
   }
   function closeResultModal() {
-    setIsResultOpen(prev=>!prev);
+    setIsResultOpen((prev) => !prev);
   }
 
   function openModal() {
@@ -26,7 +35,6 @@ const Navbar = () => {
   function openResultModal() {
     setIsResultOpen(true);
   }
-
 
   const classSets = [
     "1987-1992",
@@ -92,245 +100,92 @@ const Navbar = () => {
 
   const seeResult = (value) => {
     setResult((prev) => !prev);
-    openResultModal(true)
+    openResultModal(true);
   };
 
   useEffect(() => {
-    closeModal()
-  }, [])
-  
-const closeModals=()=>{
-    closeModal()
-    closeResultModal()
-}
+    closeModal();
+  }, []);
 
-const navigate = useNavigate();
+  const closeModals = () => {
+    closeModal();
+    closeResultModal();
+  };
 
+  const navigate = useNavigate();
 
-const handleLogout = (e) => {
-  e.preventDefault();
-  logoutApi("/auth/logout").then((response) => {
-    navigate("/login");
-  });
-};
+  const handleLogout = (e) => {
+    e.preventDefault();
+    postFetch("/auth/logout", "").then((response) => {
+      dispatch(setUser({}));
+      navigate("/login");
+    });
+  };
+  let [filterModal, setFilterModal] = useState(false);
+  let [filteredUsers, setFilteredUsers] = useState();
+  let [tot, setTot] = useState(0);
+
+  const openFilterModal = () => {
+    setFilterModal(true);
+  };
+
+  const totalMessage =
+    Number(localStorage.getItem("messageCount")) +
+    Number(localStorage.getItem("conversationCount"));
+  useEffect(() => {
+    setTot(totalMessage)
+  }, [totalMessage]);
+
+ 
+  console.log(totalMessage)
   return (
     <>
-      {!result && (
-        <Transition appear show={isOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={closeModal}>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+      <FilterModal
+        setFilteredUsers={setFilteredUsers}
+        filteredUsers={filteredUsers}
+        filterModal={filterModal}
+        setFilterModal={setFilterModal}
+      />
+      <FilterResult
+        setFilteredUsers={setFilteredUsers}
+        filteredUsers={filteredUsers}
+      />
+      {userId ? (
+        <div className="bg-blue-900  w-full fixed top-0 z-10 flex items-center justify-between p-5">
+          <div className="flex items-center gap-2">
+            <div
+              className="flex items-center"
+              onClick={() => openFilterModal()}
             >
-              <div className="fixed inset-0 bg-black/25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 overflow-y-auto">
-              <div className="flex min-h-full items-center justify-center p-4 text-center">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <div className="flex items-center bg-gray-700 rounded-xl p-2 gap-2">
-                      <FiSearch className="text-2xl text-white" />
-                      <input
-                        className="bg-transparent w-full outline-none text-white"
-                        placeholder="Search Alumnus Name"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 justify-between h-[400px] overflow-scroll mt-3">
-                      <div className="mt-2">
-                        <h4 className="font-semibold text-lg">Class</h4>
-                        <div className="overflow-scroll h-[350px] mt-2">
-                          {classSets.map((classSet) => (
-                            <div className="flex items-center gap-1 ">
-                              <input
-                                type="checkbox"
-                                className="rounded-full p-2 border-gray-800"
-                              />{" "}
-                              <p>{classSet}</p>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="mt-2">
-                          <h4 className="font-semibold text-lg">Country</h4>
-
-                          <Select
-                            options={options}
-                            value={value}
-                            onChange={changeHandler}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-2">
-                        <h4 className="font-semibold text-lg">House</h4>
-                        <div className="overflow-scroll mt-2">
-                          {Houses.map((House) => (
-                            <div className="flex items-center gap-1 ">
-                              <input
-                                type="checkbox"
-                                className="rounded-full p-2 border-gray-800"
-                              />{" "}
-                              <p>{House}</p>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="mt-2">
-                          <h4 className="font-semibold text-lg">Profession</h4>
-                          <div className="overflow-scroll mt-2">
-                            {Professions.map((Profession) => (
-                              <div className="flex items-center gap-1 ">
-                                <input
-                                  type="checkbox"
-                                  className="rounded-full p-2 border-gray-800"
-                                />{" "}
-                                <p className="text-sm">{Profession}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-between mt-2 border-t border-gray-600 pt-3">
-                      <button
-                        onClick={() => seeResult()}
-                        className="bg-black py-1 px-3 rounded-lg text-white outine-none"
-                      >
-                        Search Result (3)
-                      </button>
-                      <button  className="py-1 px-3 rounded-lg border  border-black">
-                        Clear Filter
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
+              <FiSearch className="text-white text-2xl" />
             </div>
-          </Dialog>
-        </Transition>
-      )}
-
-      {result && (
-        <Transition appear show={isResultOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={closeModal}>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black/25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 overflow-y-auto">
-              <div className="flex min-h-full items-center justify-center p-4 text-center">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                    <div>
-                      <Link to="/profile">
-                        <div className="flex items-center gap-2" onClick={()=>closeModal()}>
-                          <img
-                            src={"/background.jpg"}
-                            className="w-[50px] rounded-full h-[50px] object-cover"
-                            alt="Background"
-                          />
-                          <div>
-                            <h4 className="font-semibold text-lg">
-                              Tolulope Akinniyi
-                            </h4>
-                            <p>1990-1995 Set</p>
-                          </div>
-                        </div>
-                      </Link>
-
-                      <Link to="/profile">
-                        <div className="flex items-center gap-2 mt-4" onClick={()=>closeModal()}>
-                          <img
-                            src={"/background.jpg"}
-                            className="w-[50px] rounded-full h-[50px] object-cover"
-                            alt="Background"
-                          />
-                          <div>
-                            <h4 className="font-semibold text-lg">
-                              Tolulope Akinniyi
-                            </h4>
-                            <p>1990-1995 Set</p>
-                          </div>
-                        </div>
-                      </Link>
-                      <Link to="/profile">
-                        <div className="flex items-center gap-2 mt-4" onClick={()=>closeModal()}>
-                          <img
-                            src={"/background.jpg"}
-                            className="w-[50px] rounded-full h-[50px] object-cover"
-                            alt="Background"
-                          />
-                          <div>
-                            <h4 className="font-semibold text-lg">
-                              Tolulope Akinniyi
-                            </h4>
-                            <p>1990-1995 Set</p>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-
-                    <div className="flex justify-end mt-2 border-t border-gray-600 pt-3">
-                      <button className="py-1 px-3 rounded-lg border  border-black" onClick={closeModals}>
-                        Clear Filter
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
+            <Link to="/conversations">
+              <div className="relative ">
+                <IoChatboxEllipses className="text-2xl text-white" />
+                {tot > 0 ? (
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center font-semibold text-white bg-red-600 h-3 w-3 rounded-full"></span>
+                ) : (
+                  ""
+                )}
               </div>
-            </div>
-          </Dialog>
-        </Transition>
-      )}
-
-      <div className="bg-blue-900  w-full fixed top-0 z-10 flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center" onClick={openModal}>
-            <FiSearch className="text-white text-2xl" />
+            </Link>
           </div>
-          <Link to="/conversations">
-            <IoChatboxEllipses className="text-2xl text-white" />
-          </Link>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link to="/profile">
-            <FaUserCircle className="text-white text-2xl" />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/profile">
+              <FaUserCircle className="text-white text-2xl" />
+            </Link>
 
-          <IoIosLogOut onClick={(e)=>{handleLogout(e)}} className="text-white text-2xl font-semibold" />
+            <IoIosLogOut
+              onClick={(e) => {
+                handleLogout(e);
+              }}
+              className="text-white text-2xl font-semibold"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
     </>
   );
 };

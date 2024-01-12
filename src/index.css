@@ -33,9 +33,21 @@ code {
 	background-image: url('/public/doodle.jpg');
 
   }
-  .reciever{
-	border-radius: 15px 15px 0px 15px;
+  .receiver{
+	border-radius: 10px 10px 10px 10px;
   }
   .sender{
-	border-radius: 15px 15px 15px 0px;
+	border-radius: 10px 10px 10px 10px;
+  }
+  .react-input-emoji--container {
+    color: #fff !important;
+	background-color: transparent !important;
+	border: none !important;
+  }
+  .react-emoji-picker{
+	left:0px !important;
+  }
+  .react-emoji-picker--wrapper{
+	overflow: scroll !important;
+	width: 100% !important;
   }
