@@ -1,7 +1,7 @@
 {
   "name": "alumni_app",
   "version": "0.1.0",
-  "private": true,
+  "homepage": ".",
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@reduxjs/toolkit": "^2.0.1",
