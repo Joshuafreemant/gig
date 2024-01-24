@@ -116,11 +116,11 @@ const Modal = ({ setUserInfo, userInfo, infoModal, setInfoModal }) => {
                             value={userInfo?.country}
                             className="border border-gray-600 rounded-md px-2 py-3 outline-none"
                             onChange={(e) =>
-                                setUserInfo({
-                                  ...userInfo,
-                                  country: e,
-                                })
-                              }
+                              setUserInfo({
+                                ...userInfo,
+                                country: e,
+                              })
+                            }
                           />
                         </div>
 
@@ -133,11 +133,11 @@ const Modal = ({ setUserInfo, userInfo, infoModal, setInfoModal }) => {
                             className="border border-gray-600 rounded-md px-2 py-3 outline-none"
                             value={userInfo?.state}
                             onChange={(e) =>
-                                setUserInfo({
-                                  ...userInfo,
-                                  state: e,
-                                })
-                              }
+                              setUserInfo({
+                                ...userInfo,
+                                state: e,
+                              })
+                            }
                           />
                         </div>
                       </div>
@@ -163,33 +163,33 @@ const Modal = ({ setUserInfo, userInfo, infoModal, setInfoModal }) => {
                               <option value="1989-1994">1989-1994</option>
                               <option value="1990-1995">1990-1995</option>
                               <option value="1991-1996">1991-1996</option>
-                              <option value="1992-1997">1992-1997</option>
-                              <option value="1993-1998">1993-1998</option>
-                              <option value="1994-1999">1994-1999</option>
-                              <option value="1995-2000">1995-2000</option>
-                              <option value="1996-2001">1996-2001</option>
-                              <option value="1997-2002">1997-2002</option>
-                              <option value="1998-2003">1998-2003</option>
-                              <option value="1999-2004">1999-2004</option>
-                              <option value="2000-2005">2000-2005</option>
-                              <option value="2001-2006">2001-2006</option>
-                              <option value="2002-2007">2002-2007</option>
-                              <option value="2003-2008">2003-2008</option>
-                              <option value="2004-2009">2004-2009</option>
-                              <option value="2005-2010">2005-2010</option>
-                              <option value="2006-2011">2006-2011</option>
-                              <option value="2007-2012">2007-2012</option>
-                              <option value="2008-2013">2008-2013</option>
-                              <option value="2009-2014">2009-2014</option>
-                              <option value="2010-2015">2010-2015</option>
-                              <option value="2011-2016">2011-2016</option>
-                              <option value="2012-2017">2012-2017</option>
-                              <option value="2013-2018">2013-2018</option>
-                              <option value="2014-2019">2014-2019</option>
-                              <option value="2015-2020">2015-2020</option>
-                              <option value="2016-2021">2016-2021</option>
-                              <option value="2017-2022">2017-2022</option>
-                              <option value="2018-2023">2018-2023</option>
+                              <option value="1991-1997">1991-1997</option>
+                              <option value="1992-1998">1992-1998</option>
+                              <option value="1993-1999">1993-1999</option>
+                              <option value="1994-2000">1994-2000</option>
+                              <option value="1995-2001">1995-2001</option>
+                              <option value="1996-2002">1996-2002</option>
+                              <option value="1997-2003">1997-2003</option>
+                              <option value="1998-2004">1998-2004</option>
+                              <option value="1999-2005">1999-2005</option>
+                              <option value="2000-2006">2000-2006</option>
+                              <option value="2001-2007">2001-2007</option>
+                              <option value="2002-2008">2002-2008</option>
+                              <option value="2003-2009">2003-2009</option>
+                              <option value="2004-2010">2004-2010</option>
+                              <option value="2005-2011">2005-2011</option>
+                              <option value="2006-2012">2006-2012</option>
+                              <option value="2007-2013">2007-2013</option>
+                              <option value="2008-2014">2008-2014</option>
+                              <option value="2009-2015">2009-2015</option>
+                              <option value="2010-2016">2010-2016</option>
+                              <option value="2011-2017">2011-2017</option>
+                              <option value="2012-2018">2012-2018</option>
+                              <option value="2013-2019">2013-2019</option>
+                              <option value="2014-2020">2014-2020</option>
+                              <option value="2015-2021">2015-2021</option>
+                              <option value="2016-2022">2016-2022</option>
+                              <option value="2017-2023">2017-2023</option>
                             </select>
                           </div>
                         </div>

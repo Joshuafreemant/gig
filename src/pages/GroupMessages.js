@@ -17,7 +17,6 @@ const GroupMessages = () => {
   let responses;
   const onChange = (event) => {
     const file = event.target.files;
-    console.log(file);
     if (file != null) {
       let reader = new FileReader();
 

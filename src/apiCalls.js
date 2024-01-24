@@ -9,9 +9,18 @@ export const postFetch = async (url, body) => {
   }
 };
 
+
 export const getFetch = async (url) => {
   try {
     const response = await apiInstance.get(url);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+export const deleteFetch = async (url) => {
+  try {
+    const response = await apiInstance.delete(url);
     return response;
   } catch (error) {
     return error;

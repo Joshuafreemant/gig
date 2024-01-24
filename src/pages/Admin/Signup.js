@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getFetch, postFetch } from "../apiCalls";
+import { getFetch, postFetch } from "../../apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const Signup = () => {
+const AdminSignup = () => {
   const navigate = useNavigate();
   const [allSets, setAllSets] = useState();
+
   const [userInfo, setUserInfo] = useState({
     firstname: "",
     lastname: "",
     email: "",
     set: "",
     house: "",
-    password: "",
+    password: ""
+   
   });
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     getFetch(`set/all-set`).then((response) => {
       setAllSets(response?.data);
     });
   }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -31,6 +33,8 @@ const Signup = () => {
       set: userInfo.set,
       house: userInfo.house,
       password: userInfo.password,
+      role: "admin",
+      status: "active",
     })
       .then((response) => {
         setLoading(false);
@@ -114,7 +118,7 @@ const Signup = () => {
             <div className="flex justify-between gap-3">
               <div className="flex flex-col mb-3 w-full">
                 <label className="text-base text-white mb-1">Set</label>
-                <div className="pr-3 w-full bg-white rounded-md  flex items-center">
+                <div className="pr-3 w-full bg-white rounded-md p-3 flex items-center">
                   <select
                     onChange={(e) =>
                       setUserInfo({
@@ -122,7 +126,7 @@ const Signup = () => {
                         set: e.target.value,
                       })
                     }
-                    className="w-full p-3 text-base  rounded-md bg-white border-none outline-none"
+                    className="w-full  text-base  rounded-md bg-white border-none outline-none"
                   >
                     <option>Choose your Set</option>
                     {allSets?.map((item) => (
@@ -136,7 +140,7 @@ const Signup = () => {
 
               <div className="flex flex-col mb-3 w-full">
                 <label className="text-base text-white mb-1">House</label>
-                <div className="pr-3 w-full bg-white rounded-md  flex items-center">
+                <div className="pr-3 w-full bg-white rounded-md p-3 flex items-center">
                   <select
                     onChange={(e) =>
                       setUserInfo({
@@ -144,13 +148,13 @@ const Signup = () => {
                         house: e.target.value,
                       })
                     }
-                    className="w-full p-3  text-base rounded-md bg-white border-none outline-none"
+                    className="w-full  text-base rounded-md bg-white border-none outline-none"
                   >
                     <option>Choose your House</option>
-                    <option value="Green">Green (Adeoti)</option>
-                    <option value="Pink">Pink (Adio)</option>
-                    <option value="Red">Red (Olabande)</option>
-                    <option value="Yellow">Yellow (Oladuuni)</option>
+                    <option value="Pink">Pink</option>
+                    <option value="Yellow">Yellow</option>
+                    <option value="Red">Red</option>
+                    <option value="Green">Green</option>
                   </select>
                 </div>
               </div>
@@ -171,7 +175,9 @@ const Signup = () => {
             </div>
             <div className="py-2 rounded-md mt-4 bg-[#1560bd] flex items-center w-full justify-center">
               {loading ? (
-                <p className="text-base m-0 text-white ">Loading...</p>
+                <p className="text-base m-0 text-white ">
+                  Loading...
+                </p>
               ) : (
                 <button className="text-base m-0 text-white ">Register</button>
               )}
@@ -192,4 +198,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default AdminSignup;

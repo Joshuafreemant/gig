@@ -17,8 +17,14 @@ code {
 }
 
 .bg-image {
-	background-image: url('/public/background.jpg');
+	position: relative;
+	background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/public/background.jpg');
+	height: 100vh; /* Adjust the height as needed */
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
   }
+  
   .bg-profile {
 	background-image: url('/public/background.jpg');
 	opacity: 0.9;
@@ -27,7 +33,7 @@ code {
   
   
   .opacity-bg {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.6);
   }
   .bg-doodle {
 	background-image: url('/public/doodle.jpg');

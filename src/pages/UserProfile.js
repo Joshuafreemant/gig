@@ -75,7 +75,7 @@ const UserProfile = () => {
         </Link>
       </div>
       <div className="bg-[#1560bd] p-6 relative -mt-1">
-        <div className="overflow-clip rounded-full absolute -top-[40px] left-4  h-[100px] w-[100px]">
+        {/* <div className="overflow-clip rounded-full absolute -top-[40px] left-4  h-[100px] w-[100px]">
           <img
             src={
               userInfo?.profilePic || "/avatar.jpg"
@@ -83,7 +83,22 @@ const UserProfile = () => {
             className="w-full h-full object-cover"
             alt="Background"
           />
-        </div>
+        </div>*/}
+       {
+           userInfo?.profilePic? <div className="rounded-full overflow-hidden w-[100px] h-[100px] object-cover bg-gray-50 flex items-center justify-center"> 
+
+        <img
+            src={ userInfo?.profilePic}
+            className="w-full h-full object-cover bg-gray-50"
+            alt=""
+          />
+          </div>
+          :
+          <div className="rounded-full overflow-hidden w-[100px] h-[100px] object-cover bg-gray-50 flex items-center justify-center">
+
+            <h1 className="text-[#1560bd] text-4xl font-semibold">{userInfo?.firstname.charAt(0)}</h1>
+          </div>
+         }
         
 
         <div className="absolute right-[10px] top-4  p-1 rounded-full">

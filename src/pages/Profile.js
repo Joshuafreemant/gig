@@ -16,7 +16,7 @@ import { upload } from "../upload";
 
 const Profile = () => {
   let [userInfo, setUserInfo] = useState(null);
-  let [imagePrev, setImagePrev] = useState(userInfo?.profilePic);
+  let [imagePrev, setImagePrev] = useState(userInfo?.profilePic || '/avatar.jpg');
 
   let [imageFile, setImageFile] = useState();
   const imageRef = useRef(null);
@@ -56,33 +56,9 @@ const Profile = () => {
   ];
 
   
-  //   const data = new FormData();
-  //   data.append("file", file);
-  //   data.append("upload_preset", "alumni");
-  //   try {
-  //     const response = await axios.post(
-  //       "https://api.cloudinary.com/v1_1/df6pun3tr/image/upload",
-  //       data
-  //     );
-  //     const { url } = response.data;
-  //     console.log(url);
-  //     if (url) {
-  //       await putFetch(`/user/update-single-user/${userId}`, {
-  //         profilePic: url,
-  //       }).then((response) => {
-  //         if (response?.status === 200) {
-  //           dispatch(setUser(response?.data));
-  //         } else {
-  //         }
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+ 
   const onChange = (event) => {
     const file = event.target.files;
-    console.log(file);
     if (file != null) {
       setImageFile(file);
       let reader = new FileReader();
@@ -136,12 +112,18 @@ const Profile = () => {
         </Link>
       </div>
       <div className="bg-[#1560bd] p-6 relative -mt-1">
-        <div className="overflow-clip rounded-full absolute -top-[40px] left-4  h-[100px] w-[100px]">
-          <img
-            src={imagePrev || "/avatar.jpg"}
-            className="w-full h-full object-cover"
-            alt="Background"
-          />
+        <div className="overflow-hidden rounded-full absolute -top-[40px] left-4  h-[100px] w-[100px]">
+         {
+          imagePrev?<img
+            src={imagePrev}
+            className="w-full h-full object-cover bg-gray-50"
+            alt=""
+          />:
+          <div className="overflow-hidden w-[100px] h-[100px] object-cover bg-gray-50 flex items-center justify-center">
+
+            <h1 className="text-[#1560bd] text-4xl font-semibold">{userInfo?.firstname.charAt(0)}</h1>
+          </div>
+         } 
         </div>
         <div className="absolute left-[93px] top-7 bg-gray-100 p-1 rounded-full">
           <MdCameraAlt

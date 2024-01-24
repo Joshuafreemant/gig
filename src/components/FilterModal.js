@@ -21,6 +21,8 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
   const [selectedHouse, setSelectedHouse] = useState("");
   const [selectedProfession, setSelectedProfession] = useState("");
 
+  const [classSets, setClassSets] = useState([]);
+
   if (viewFilteredResult === true) {
     setFilterModal(false);
   }
@@ -34,40 +36,48 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
     });
   }, [filterModal]);
 
-  const classSets = [
-    "1987-1992",
-    "1988-1993",
-    "1989-1994",
-    "1990-1995",
-    "1991-1996",
-    "1992-1997",
-    "1993-1998",
-    "1994-1999",
-    "1995-2000",
-    "1996-2001",
-    "1997-2002",
-    "1998-2003",
-    "1999-2004",
-    "2000-2005",
-    "2001-2006",
-    "2002-2007",
-    "2003-2008",
-    "2004-2009",
-    "2005-2010",
-    "2006-2011",
-    "2007-2012",
-    "2008-2013",
-    "2009-2014",
-    "2010-2015",
-    "2011-2016",
-    "2012-2017",
-    "2013-2018",
-    "2014-2019",
-    "2015-2020",
-    "2016-2021",
-    "2017-2022",
-    "2018-2023",
-  ];
+  useEffect(() => {
+    getFetch(`set/all-set`).then((response) => {
+      setClassSets(response?.data);
+      console.log(response.data)
+    });
+  }, [classSets?.length]);
+
+  // const classSets = [
+  //   "1987-1992",
+  //   "1988-1993",
+  //   "1989-1994",
+  //   "1990-1995",
+  //   "1991-1996",
+  //   "1992-1997",
+  //   "1993-1998",
+  //   "1994-1999",
+  //   "1995-2000",
+  //   "1996-2001",
+  //   "1997-2002",
+  //   "1998-2003",
+  //   "1999-2004",
+  //   "2000-2005",
+  //   "2001-2006",
+  //   "2002-2007",
+  //   "2003-2008",
+  //   "2004-2009",
+  //   "2005-2010",
+  //   "2006-2011",
+  //   "2007-2012",
+  //   "2008-2013",
+  //   "2009-2014",
+  //   "2010-2015",
+  //   "2011-2016",
+  //   "2012-2017",
+  //   "2013-2018",
+  //   "2014-2019",
+  //   "2015-2020",
+  //   "2016-2021",
+  //   "2017-2022",
+  //   "2018-2023",
+  // ];
+
   const Houses = ["Pink", "Yellow", "Red", "Green"];
 
   const Professions = [
@@ -104,7 +114,7 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
   };
 
  let filteredAlumni = allUsers?.filter((allUser)=>{
-  return allUser?._id !== user?._id
+  return allUser?._id !== user?._id && allUser?.status==="active"
 });
   useEffect(() => {
     let filtered = filteredAlumni
@@ -191,22 +201,22 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 justify-between h-[400px] overflow-scroll mt-3">
+                  <div className="grid grid-cols-2 gap-4 justify-between max-h-[400px] overflow-scroll mt-3">
                     <div className="mt-2">
                       <h4 className="font-semibold text-lg">Class</h4>
                       <div className="overflow-y-scroll h-[350px] mt-2">
-                        {classSets.map((classSet,i) => (
+                        {classSets?.map((classSet,i) => (
                           <div key={i} className="flex items-center gap-1 ">
                             <input
                               type="radio"
                               className="rounded-full p-2 border-gray-800"
-                              id={classSet}
+                              id={classSet?.set}
                               name="classSet"
-                              value={classSet}
-                              checked={selectedClass === classSet}
+                              value={classSet?.set}
+                              checked={selectedClass === classSet?.set}
                               onChange={handleClassChange}
                             />{" "}
-                            <p>{classSet}</p>
+                            <p>{classSet?.set}</p>
                           </div>
                         ))}
                       </div>

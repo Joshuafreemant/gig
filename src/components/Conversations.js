@@ -42,11 +42,15 @@ const ConversationsComponent = ({ conversation }) => {
       to={`/messages/${userId}/${friendId}`}
     >
       <div className="flex items-center gap-3 mt-6  pb-4 border-b-gray-400 border-b">
-        <img
+       
+       <div  className="w-[60px] h-[45px] rounded-full overflow-hidden ">
+ <img
           src={userInfo?.profilePic || "/avatar.png"}
-          className="w-[50px] h-[50px] rounded-full object-cover"
+          className="w-full h-full  object-cover"
           alt="Background"
         />
+       </div>
+       
         <div className="flex flex-col  w-full">
           <div className="flex justify-between">
             <h4 className="text-white text-lg font-semibold">

@@ -16,6 +16,9 @@ import ResetPassword from "./pages/ResetPasword";
 import UserProfile from "./pages/UserProfile";
 import GroupMessages from "./pages/GroupMessages";
 import ProtectedRoute from "./protectedRoute";
+import AdminSignup from "./pages/Admin/Signup";
+import ControlPanel from "./pages/Admin/ControlPanel";
+import Sets from "./pages/Admin/Sets";
 
 function App() {
   return (
@@ -26,8 +29,11 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/register" element={<Signup />} />
+        <Route path="/control-panel" element={<ControlPanel />} />
+        <Route path="/sets" element={<Sets />} />
+        <Route path="/admin-register" element={<AdminSignup />} />
 
         <Route
           path="/profile"

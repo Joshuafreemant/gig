@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const Login = () => {
+const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
@@ -30,7 +30,6 @@ const Login = () => {
         dispatch(setUser(response?.data));
       } else {
         navigate("/login");
-        console.log("response", response);
         toast(response?.response?.data.message, {
           theme: "dark",
         });
@@ -45,8 +44,8 @@ const Login = () => {
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
         <div className="flex flex-col items-center justify-center  w-full">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
-            <h1 className="text-3xl font-bold">Welcome</h1>
-            <h2 className="text-lg font-semibold">Login to your Account</h2>
+            <h1 className="text-3xl font-bold">Welcome Admin</h1>
+            <h2 className="text-lg font-semibold">Login to Your Account </h2>
           </div>
           <form
             onSubmit={(e) => handleSubmit(e)}
@@ -103,4 +102,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;
