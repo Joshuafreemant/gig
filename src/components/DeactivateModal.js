@@ -12,7 +12,7 @@ import { putFetch } from "../apiCalls";
 import { useDispatch } from "react-redux";
 import { setAdminUsers, setUser } from "../slices/userSlice";
 
-const ControlModal = ({ user, isOpen, setIsOpen }) => {
+const DeactivateModal = ({ user, isOpen, setIsOpen }) => {
   const dispatch = useDispatch();
 
   function closeModal() {
@@ -21,13 +21,12 @@ const ControlModal = ({ user, isOpen, setIsOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await putFetch(`/user/activate-user/${user?._id}`, {
-      status: "active",
+      status: "inactive",
     }).then((response) => {
       if (response?.status === 200) {
         // navigate("/profile");
         dispatch(setAdminUsers(response?.data));
         window.location.reload();
-
         closeModal();
       } else {
         // navigate("/login");
@@ -64,19 +63,23 @@ const ControlModal = ({ user, isOpen, setIsOpen }) => {
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <div>
                     <p className="text-lg">
-                      Are You sure you want to activate{" "}
+                      This user is already approved, hence active, are You sure
+                      you want to deactivate{" "}
                       {user?.firstname + " " + user?.lastname} ?{" "}
                     </p>
 
                     <div className="flex items-center gap-3 my-4">
-                      <button  onClick={() => closeModal()} className="p-3 rounded-lg border border-black outline-none text-black">
+                      <button
+                        onClick={() => closeModal()}
+                        className="p-3 rounded-lg border border-black outline-none text-black"
+                      >
                         Cancel
                       </button>
                       <button
                         onClick={(e) => handleSubmit(e)}
                         className="bg-blue-900 p-3 rounded-lg outline-none text-white"
                       >
-                        Activate
+                        Deactivate
                       </button>
                     </div>
                   </div>
@@ -90,4 +93,4 @@ const ControlModal = ({ user, isOpen, setIsOpen }) => {
   );
 };
 
-export default ControlModal;
+export default DeactivateModal;

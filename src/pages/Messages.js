@@ -34,7 +34,7 @@ const Messages = () => {
   }, [messages]);
 
   let [conversations, setConversations] = useState([]);
-  let [isSequenceExists, setIsSequenceExists] = useState();
+  let [isSequenceExists, setIsSequenceExists] = useState(false);
 
   let conversationMembers = conversations?.map((convo) => convo?.members);
   const memberIdsToCheck = [senderId, receiverId];
@@ -146,7 +146,7 @@ const Messages = () => {
       postFetch("/messages", {
         conversationId: response?.data?._id,
         sender: senderId,
-        text: url ? url : textMessage,
+        text: textMessage,
       }).then((response) => {
         setMessages(response?.data?.chats);
         setIsSequenceExists(true);
@@ -154,9 +154,48 @@ const Messages = () => {
       });
     });
   };
-  function handleOnEnter(text) {
-    setTextMessage(text);
-    handleSendMessage();
+
+  // const handleSendMessageWithConversation = async (url) => {
+  //   try {
+  //     console.log("Creating conversation...");
+  //     const conversationResponse = await postFetch("/conversations", {
+  //       senderId,
+  //       receiverId,
+  //     });
+
+  //     const conversationId = conversationResponse?.data?._id;
+
+  //     setConversationId(conversationId);
+
+  //     console.log("Sending message...");
+  //     console.log("aye oooo", {
+  //       conversationId: conversationId,
+  //       sender: senderId,
+  //       text: textMessage,
+  //     });
+  //     const messageResponse = await postFetch("/messages", {
+  //       conversationId: conversationId,
+  //       sender: senderId,
+  //       text: textMessage,
+  //     });
+
+  //     setMessages(messageResponse?.data?.chats);
+  //     setIsSequenceExists(true);
+  //     setTextMessage("");
+
+  //     console.log("Message sent successfully");
+  //   } catch (error) {
+  //     console.error("Error sending message with conversation:", error);
+  //   }
+  // };
+
+  function handleOnEnter() {
+    // setTextMessage(text);
+    if(!isSequenceExists){
+      handleSendMessageWithConversation()
+    }else{
+      handleSendMessage();
+    }
   }
   return (
     <>
@@ -168,13 +207,13 @@ const Messages = () => {
           </Link>
           <Link to={`/user-profile/${userInfo?._id}`}>
             <div className="flex items-center gap-2">
-              <div className="w-[35px] h-[35px]  rounded-full overflow-hidden">
+              <div className="w-[30px] h-[30px]  rounded-full overflow-hidden">
                 <img
                   src={userInfo?.profilePic || "/background.jpg"}
                   className="h-full w-full object-fit"
                 />
               </div>
-              <h2 className="text-white text-xl font-semibold">
+              <h2 className="text-white text-lg font-semibold">
                 {userInfo?.firstname + " " + userInfo?.lastname}
               </h2>
             </div>
@@ -193,7 +232,13 @@ const Messages = () => {
                           : "relative  bg-[#1560bd] text-white w-[45%] px-1 pt-4 pb-5  receiver"
                       }
                     >
-                      <img src={message?.text} />
+                      <a
+                        href={message?.text}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={message?.text} alt="Message Image" />
+                      </a>
                       <p className="text-[9px] ml-[55%] absolute bottom-1 right-2">
                         {format(message?.createdAt)}
                       </p>
@@ -225,7 +270,7 @@ const Messages = () => {
             })}
           </div>
         </div>
-        
+
         <div className="fixed bottom-0 px-2 flex items-center w-full bg-blue-900  p-4 gap-2">
           <div className=" bg-gray-900 rounded-3xl flex w-full gap-2 px-3 py-1 items-center">
             <InputEmoji
@@ -233,7 +278,7 @@ const Messages = () => {
               onChange={setTextMessage}
               cleanOnEnter
               onEnter={handleOnEnter}
-              className="w-11/12 text-white text-lg outline-none border-none py-2"
+              className="w-11/12 text-white text-[16px] outline-none border-none py-2"
               placeholder="Type a message"
             />
             <img
@@ -260,7 +305,7 @@ const Messages = () => {
           )}
         </div>
       </div>
-    
+
       <input
         type="file"
         style={{ display: "none" }}

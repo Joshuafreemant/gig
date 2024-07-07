@@ -43,40 +43,7 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
     });
   }, [classSets?.length]);
 
-  // const classSets = [
-  //   "1987-1992",
-  //   "1988-1993",
-  //   "1989-1994",
-  //   "1990-1995",
-  //   "1991-1996",
-  //   "1992-1997",
-  //   "1993-1998",
-  //   "1994-1999",
-  //   "1995-2000",
-  //   "1996-2001",
-  //   "1997-2002",
-  //   "1998-2003",
-  //   "1999-2004",
-  //   "2000-2005",
-  //   "2001-2006",
-  //   "2002-2007",
-  //   "2003-2008",
-  //   "2004-2009",
-  //   "2005-2010",
-  //   "2006-2011",
-  //   "2007-2012",
-  //   "2008-2013",
-  //   "2009-2014",
-  //   "2010-2015",
-  //   "2011-2016",
-  //   "2012-2017",
-  //   "2013-2018",
-  //   "2014-2019",
-  //   "2015-2020",
-  //   "2016-2021",
-  //   "2017-2022",
-  //   "2018-2023",
-  // ];
+  
 
   const Houses = ["Pink", "Yellow", "Red", "Green"];
 
@@ -277,7 +244,7 @@ const FilterModal = ({ filterModal, setFilterModal,filteredUsers,setFilteredUser
                       onClick={() => handleFilterResult()}
                       className="bg-black py-1 px-3 rounded-lg text-white outine-none"
                     >
-                      Search Result ({filteredUsers?.length||0})
+                      Search Result ({filteredUsers?.length})
                     </button>
                     <button
                       onClick={() => clearFilter()}

@@ -3,8 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { getFetch, postFetch } from "../../apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa";
 const AdminSignup = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState("password");
+
   const [allSets, setAllSets] = useState();
 
   const [userInfo, setUserInfo] = useState({
@@ -26,13 +30,13 @@ const AdminSignup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    postFetch("/auth/register", {
+    postFetch("/auth/admin-auth", {
       firstname: userInfo.firstname,
       lastname: userInfo.lastname,
-      email: userInfo.email,
+      email: userInfo.email.toLowerCase(),
       set: userInfo.set,
       house: userInfo.house,
-      password: userInfo.password,
+      password: userInfo.password.toLowerCase(),
       role: "admin",
       status: "active",
     })
@@ -61,7 +65,7 @@ const AdminSignup = () => {
     <>
       <ToastContainer />
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center  w-full mt-12">
+        <div className="flex flex-col items-center justify-center  w-full mt-12  md:w-4/12">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
             <h1 className="text-3xl font-bold">Create Account</h1>
             <h2 className="text-lg font-semibold">
@@ -162,16 +166,20 @@ const AdminSignup = () => {
 
             <div className="flex flex-col mb-3">
               <label className="text-base text-white mb-1">Password</label>
-              <input
-                type="password"
-                className="px-3 text-base py-3 rounded-md bg-white border-none"
-                onChange={(e) =>
-                  setUserInfo({
-                    ...userInfo,
-                    password: e.target.value,
-                  })
-                }
-              />
+              <div className="flex items-center px-3 text-base py-3 rounded-md bg-white border-none">
+                <input
+                  type={showPassword}
+                  className="w-[95%] bg-transparent outline-none"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              {showPassword==="password"&& <FaEye onClick={() => setShowPassword("text")} />}
+              {showPassword==="text"&& <FaEyeSlash onClick={() => setShowPassword("password")} />}
+              </div>
             </div>
             <div className="py-2 rounded-md mt-4 bg-[#1560bd] flex items-center w-full justify-center">
               {loading ? (

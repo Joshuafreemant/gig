@@ -68,11 +68,11 @@ const FilterResult = ({ filteredUsers }) => {
                               src={
                                 filteredUser?.profilePic || "/background.jpg"
                               }
-                              className="w-[50px] rounded-full h-[50px] object-cover"
+                              className="w-[40px] rounded-full h-[40px] object-cover"
                               alt="Background"
                             />
                             <div>
-                              <h4 className="font-semibold text-lg">
+                              <h4 className="font-semibold text-md">
                                 {filteredUser?.firstname +
                                   " " +
                                   filteredUser?.lastname}

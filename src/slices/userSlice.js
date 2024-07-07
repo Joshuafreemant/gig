@@ -5,6 +5,7 @@ const initialState = {
   allUsers:null,
   adminUsers:null,
   count:0,
+  email:"",
 };
 
 const userSlice = createSlice({
@@ -22,11 +23,14 @@ const userSlice = createSlice({
       },
       setCount: (state, action) => {
         return {...state, count: action.payload};
+      },
+      setUserEmail: (state, action) => {
+        return {...state, email: action.payload};
       }
     
   },
 });
 
-export const { setUser,setAllUsers,setCount,setAdminUsers } = userSlice.actions;
+export const { setUserEmail,setUser,setAllUsers,setCount,setAdminUsers } = userSlice.actions;
 
 export default userSlice.reducer;

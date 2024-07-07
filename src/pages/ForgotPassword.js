@@ -3,9 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { postFetch } from "../apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setUserEmail } from "../slices/userSlice";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -17,11 +20,12 @@ const ForgotPassword = () => {
       email: email,
     }).then((response) => {
       if (response?.status === 200) {
+        dispatch(setUserEmail(email));
        
         toast(response?.data?.message, {
           theme: "dark",
         });
-        // navigate("/reset-password");
+        navigate("/otp-token");
         setLoading(false);
       } else {
         navigate("/forgot-password");
@@ -37,7 +41,7 @@ const ForgotPassword = () => {
       <ToastContainer />
 
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center  w-full">
+        <div className="flex flex-col items-center justify-center  w-full  md:w-4/12">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
             <h1 className="text-3xl font-bold">Forgot Password?</h1>
             <h2 className="text-lg font-semibold">

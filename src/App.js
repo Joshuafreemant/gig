@@ -19,6 +19,7 @@ import ProtectedRoute from "./protectedRoute";
 import AdminSignup from "./pages/Admin/Signup";
 import ControlPanel from "./pages/Admin/ControlPanel";
 import Sets from "./pages/Admin/Sets";
+import Token from "./pages/Token";
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/otp-token" element={<Token />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/control-panel" element={<ControlPanel />} />
         <Route path="/sets" element={<Sets />} />

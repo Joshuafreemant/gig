@@ -3,14 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { postFetch } from "../apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "react-router-dom";
+import { setUserEmail } from "../slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+  const { email:userEmail } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ const ResetPassword = () => {
     } else{
        setLoading(true);
     await postFetch("/auth/reset-password", {
-      resetToken: token,
+      email: userEmail,
       newPassword: password,
     }).then((response) => {
       if (response?.status === 200) {
@@ -30,12 +32,16 @@ const ResetPassword = () => {
         });
         navigate("/login");
         setLoading(false);
+         dispatch(setUserEmail(""));
+
       } else {
         navigate("/forgot-password");
         toast(response?.response?.data.message, {
           theme: "dark",
         });
         setLoading(false);
+        dispatch(setUserEmail(""));
+
       }
     });
     }
@@ -47,7 +53,7 @@ const ResetPassword = () => {
       <ToastContainer />
 
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center  w-full">
+        <div className="flex flex-col items-center justify-center  w-full  md:w-4/12">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
             <h1 className="text-3xl font-bold">Reset Password</h1>
             <h2 className="text-lg font-semibold">

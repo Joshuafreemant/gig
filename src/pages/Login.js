@@ -5,9 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const AdminLogin = () => {
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa";
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState("password");
+
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -18,8 +22,8 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     await postFetch("/auth/login", {
-      email: userInfo?.email,
-      password: userInfo?.password,
+      email: userInfo?.email.toLowerCase(),
+      password: userInfo?.password.toLowerCase(),
     }).then((response) => {
       if (response?.status === 200) {
         toast("Login Successful", {
@@ -42,9 +46,9 @@ const AdminLogin = () => {
       <ToastContainer />
 
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center  w-full">
+        <div className="flex flex-col items-center justify-center  w-full md:w-4/12">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
-            <h1 className="text-3xl font-bold">Welcome Admin</h1>
+            <h1 className="text-3xl font-bold">Welcome</h1>
             <h2 className="text-lg font-semibold">Login to Your Account </h2>
           </div>
           <form
@@ -66,16 +70,20 @@ const AdminLogin = () => {
             </div>
             <div className="flex flex-col my-3">
               <label className="text-base text-white mb-1">Password</label>
-              <input
-                type="password"
-                className="px-3 text-base py-3 rounded-md bg-white border-none"
-                onChange={(e) =>
-                  setUserInfo({
-                    ...userInfo,
-                    password: e.target.value,
-                  })
-                }
-              />
+              <div className="flex items-center px-3 text-base py-3 rounded-md bg-white border-none">
+                <input
+                  type={showPassword}
+                  className="w-[95%] bg-transparent outline-none"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              {showPassword==="password"&& <FaEye onClick={() => setShowPassword("text")} />}
+              {showPassword==="text"&& <FaEyeSlash onClick={() => setShowPassword("password")} />}
+              </div>
             </div>
             <div className="py-2 rounded-md mt-3 bg-[#1560bd] flex items-center w-full justify-center">
               {loading ? (
@@ -102,4 +110,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default Login;

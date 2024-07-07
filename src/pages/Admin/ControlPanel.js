@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Space, Table, Tag } from "antd";
 import { columns } from "./TableColumns";
 import ControlModal from "../../components/ControlModal";
+import DeactivateModal from "../../components/DeactivateModal";
 
 const ControlPanel = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,9 @@ const ControlPanel = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeactivateOpen, setIsDeactivateOpen] = useState(false);
+  
+
   const { allUsers, user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -27,7 +31,15 @@ const ControlPanel = () => {
   const OpenModal = (data) => {
     setIsOpen(true);
     setCurrentUser(data);
+    
   };
+  const OpenDeactivateModal = (data) => {
+    setIsDeactivateOpen(true);
+    setCurrentUser(data);
+    
+  };
+
+  
   const handleallUsers = (e) => {
     e.preventDefault();
     getFetch(`user/get-all-user`).then((response) => {
@@ -97,14 +109,14 @@ const ControlPanel = () => {
           {!record?.status.length || record?.status === "inactive" ? (
             <div
               onClick={() => OpenModal(record)}
-              className="flex items-center justify-center bg-red-600 rounded-sm p-1"
+              className="flex items-center justify-center bg-red-600 rounded-sm p-1 cursor-pointer"
             >
               <p className="m-0 text-white font-semibold  text-xs">Inactive</p>
             </div>
           ) : (
             <div
-              // onClick={() => OpenModal(record)}
-              className="flex items-center justify-center bg-green-600 rounded-sm p-1"
+              onClick={() => OpenDeactivateModal(record)}
+              className="flex items-center justify-center bg-green-600 rounded-sm p-1 cursor-pointer"
             >
               <p className=" m-0 text-white font-semibold  text-xs">Active</p>
             </div>
@@ -151,6 +163,8 @@ const ControlPanel = () => {
         <Table columns={columns} dataSource={users} />;
       </div>
       <ControlModal isOpen={isOpen} setIsOpen={setIsOpen} user={currentUser} />
+      <DeactivateModal isOpen={isDeactivateOpen} setIsOpen={setIsDeactivateOpen} user={currentUser} />
+      
     </>
   );
 };

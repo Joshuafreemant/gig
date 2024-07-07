@@ -3,9 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { getFetch, postFetch } from "../apiCalls";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa";
 const Signup = () => {
   const navigate = useNavigate();
   const [allSets, setAllSets] = useState();
+  const [showPassword, setShowPassword] = useState("password");
   const [userInfo, setUserInfo] = useState({
     firstname: "",
     lastname: "",
@@ -13,6 +16,8 @@ const Signup = () => {
     set: "",
     house: "",
     password: "",
+    role: "member",
+    status: "inactive",
   });
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -27,10 +32,12 @@ const Signup = () => {
     postFetch("/auth/register", {
       firstname: userInfo.firstname,
       lastname: userInfo.lastname,
-      email: userInfo.email,
+      email: userInfo.email.toLowerCase(),
       set: userInfo.set,
       house: userInfo.house,
-      password: userInfo.password,
+      password: userInfo.password.toLowerCase(),
+      role: userInfo.role || "member",
+      status: userInfo.status || "inactive",
     })
       .then((response) => {
         setLoading(false);
@@ -57,7 +64,7 @@ const Signup = () => {
     <>
       <ToastContainer />
       <div className="text-2xl bg-image h-screen w-full flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center  w-full mt-12">
+        <div className="flex flex-col items-center justify-center  w-full mt-8  md:w-4/12">
           <div className="flex text-white flex-col items-center justify-center w-full mb-5 gap-3">
             <h1 className="text-3xl font-bold">Create Account</h1>
             <h2 className="text-lg font-semibold">
@@ -114,7 +121,7 @@ const Signup = () => {
             <div className="flex justify-between gap-3">
               <div className="flex flex-col mb-3 w-full">
                 <label className="text-base text-white mb-1">Set</label>
-                <div className="pr-3 w-full bg-white rounded-md  flex items-center">
+                <div className="pr-3 w-full bg-white rounded-md  flex items-center p-3">
                   <select
                     onChange={(e) =>
                       setUserInfo({
@@ -122,7 +129,7 @@ const Signup = () => {
                         set: e.target.value,
                       })
                     }
-                    className="w-full p-3 text-base  rounded-md bg-white border-none outline-none"
+                    className="w-full  text-base  rounded-md bg-white border-none outline-none"
                   >
                     <option>Choose your Set</option>
                     {allSets?.map((item) => (
@@ -136,7 +143,7 @@ const Signup = () => {
 
               <div className="flex flex-col mb-3 w-full">
                 <label className="text-base text-white mb-1">House</label>
-                <div className="pr-3 w-full bg-white rounded-md  flex items-center">
+                <div className="pr-3 w-full bg-white rounded-md  flex items-center p-3">
                   <select
                     onChange={(e) =>
                       setUserInfo({
@@ -144,7 +151,7 @@ const Signup = () => {
                         house: e.target.value,
                       })
                     }
-                    className="w-full p-3  text-base rounded-md bg-white border-none outline-none"
+                    className="w-full   text-base rounded-md bg-white border-none outline-none"
                   >
                     <option>Choose your House</option>
                     <option value="Green">Green (Adeoti)</option>
@@ -158,16 +165,21 @@ const Signup = () => {
 
             <div className="flex flex-col mb-3">
               <label className="text-base text-white mb-1">Password</label>
-              <input
-                type="password"
-                className="px-3 text-base py-3 rounded-md bg-white border-none"
-                onChange={(e) =>
-                  setUserInfo({
-                    ...userInfo,
-                    password: e.target.value,
-                  })
-                }
-              />
+
+              <div className="flex items-center px-3 text-base py-3 rounded-md bg-white border-none">
+                <input
+                  type={showPassword}
+                  className="w-[95%] bg-transparent outline-none"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              {showPassword==="password"&& <FaEye onClick={() => setShowPassword("text")} />}
+              {showPassword==="text"&& <FaEyeSlash onClick={() => setShowPassword("password")} />}
+              </div>
             </div>
             <div className="py-2 rounded-md mt-4 bg-[#1560bd] flex items-center w-full justify-center">
               {loading ? (
